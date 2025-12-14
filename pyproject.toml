@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "UICord"
+version = "1.0.0"
+description = "UI helper for Discord bots"
+requires-python = ">=3.8"
+
+[tool.setuptools]
+py-modules = ["uicord"]
