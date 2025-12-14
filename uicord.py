@@ -47,22 +47,6 @@ class Text(ui.Button):
 		self._underlying.style = Colors.Gray
 	async def callback(self, ctx, *args):
 		await self.view.reload(ctx)
-class Toggle(Button):
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		self.active=False
-		self.style=Colors.Red
-		self.emoji="❌"
-
-	async def callback(self, ctx):
-		if active:
-			self.style=Colors.Red
-			self.emoji="❌"
-		else:
-			self.style=Colors.Green
-			self.emoji="✅"
-		self.active is not active
-		await self.cb(ctx)
 
 class ButtonChoices(ui.ActionRow):
 	def __init__(self, *btns):
@@ -143,3 +127,19 @@ class Button(ui.Button):
 	def color(self): return self.style
 	@color.setter
 	def color(self, value): self.style=value
+class Toggle(Button):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.active=False
+		self.style=Colors.Red
+		self.emoji="❌"
+
+	async def callback(self, ctx):
+		if active:
+			self.style=Colors.Red
+			self.emoji="❌"
+		else:
+			self.style=Colors.Green
+			self.emoji="✅"
+		self.active is not active
+		await self.cb(ctx)
