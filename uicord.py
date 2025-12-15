@@ -12,7 +12,7 @@ class Colors:
 	Link = 5
 	Yellow = 6
 
-class View(ui.View):
+class View(ui.DesignerView):
 	def __init__(self):
 		super().__init__()
 
@@ -40,13 +40,9 @@ def interaction(component=None):
 			component.cb = interact
 	return wrapper
 
-class Text(ui.Button):
-	def __init__(self, text="My Text", emoji=None):
-		super().__init__(emoji=emoji, label=text)
-		self._underlying.disabled = False
-		self._underlying.style = Colors.Gray
-	async def callback(self, ctx, *args):
-		await self.view.reload(ctx)
+class Text(ui.TextDisplay):
+	def __init__(self, text="myText"):
+		super().__init__(text)
 
 class ButtonChoices(ui.ActionRow):
 	def __init__(self, *btns):
@@ -79,11 +75,10 @@ class ButtonChoices(ui.ActionRow):
 		self.add_item(button)
 		self.saved_colors.append(button.color)
 
-class ButtonRow(ButtonChoices):
+class ActionRow(ui.ActionRow):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-	async def callback(self, *args):
-		await self.cb(*args)
+	def add(self, *a, **k): self.add_item(*a,**k)
 class Choices(ui.Select):
 	def __init__(self, placeholder="Pick"):
 		super().__init__()
@@ -116,12 +111,12 @@ class Choices(ui.Select):
 		for opt in self.options:
 			opt.default = (selected==opt.value)
 		self.disabled = v
+	async def update(self):
+		self.disable(False)
 
 class Button(ui.Button):
-	def __init__(self, text="My Button", emoji=None, color=Colors.Blue, url=None):
-		super().__init__()
-		self.label=text
-		self.color = color if not url else Colors.link
+	def __init__(self, text="My Button", emoji=None, color=Colors.Blue, url=None, id=None):
+		super().__init__(label=text, custom_id=id, style=color, url=url)
 		self.emoji = emoji
 	@property
 	def color(self): return self.style
@@ -143,3 +138,40 @@ class Toggle(Button):
 			self.emoji="✅"
 		self.active is not active
 		await self.cb(ctx)
+
+class Container(ui.Container):
+	def __init__(self, *items, **kwargs):
+		super().__init__(*items, **kwargs)
+
+class Separator(ui.Separator):
+	def __init__(self, *, divider=True):
+		super().__init__(divider=divider)
+
+class Thumbnail(ui.Thumbnail):
+	def __init__(self, url):
+		super().__init__(url)
+
+class Section(ui.Section):
+	def __init__(self, *items, **kwargs):
+		super().__init__(*items, **kwargs)
+
+
+class Modal(ui.DesignerModal):
+	def __init__(self, title="Modal Title"):
+		super().__init__(title=title)
+		self.inputs=[]
+	def add_input(self, label="input label", style="short", placeholder=None, default=None):
+		inp_style = enums.InputTextStyle.short if style=="short" else enums.InputTextStyle.paragraph
+		input_text = ui.InputText(style=inp_style, placeholder=placeholder, value=default)
+		self.add_item(
+			ui.Label(
+				label=label,
+				item=input_text
+			)
+		)
+		self.inputs.append(input_text)
+		return input_text
+	async def callback(self, ctx):
+		pass
+	async def get_value(self, index=0):
+		return self.inputs[index].value
