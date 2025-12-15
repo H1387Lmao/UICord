@@ -13,13 +13,26 @@ class Colors:
 	Yellow = 6
 
 class View(ui.DesignerView):
+	"""The main container of every component."""
 	def __init__(self):
+		"""Initializes the view"""
 		super().__init__()
 
 	def add(self, component):
+		"""
+		The component specified to the view
+
+		:param component: The component to be added
+		:return: Returns the component added.
+		"""
 		self.add_item(component)
 		return component
 	async def reload(self, ctx):
+		"""
+		Reloads the current view, Updates every unsynced compoenents.
+
+		:return: None
+		"""
 		await ctx.response.edit_message(view=self)
 
 def interaction(component=None):
