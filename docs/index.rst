@@ -13,8 +13,8 @@ Contents
    :maxdepth: 2
    :caption: Contents:
 
-   installation
-   usage
+   Installation
+   Components
 
 
 Example
