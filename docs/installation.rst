@@ -8,19 +8,23 @@ installation
 
 Dependencies
 ------------
+
 | To install the needed depedencies,
 Windows:
+
 .. code-block:: console
 
    PS> pip install -U pycord --pre
 
 Linux:
+
 .. code-block:: console
 
    $ python3 -m pip install -U py-cord --pre
 
 UICord
 ------
+
 | To install UICord, make sure you have the correct dependencies.
 
 .. code-block:: console
@@ -29,6 +33,7 @@ UICord
 
 Check
 -----
+
 | To check installation. run these:
 .. code-block:: python
 

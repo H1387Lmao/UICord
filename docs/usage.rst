@@ -3,6 +3,7 @@ usage
 
 View
 --------
+
 .. py:class:: View(discord.ui.DesignerView)
    The main container of every component!
    :param discord.ui.DesignerView: Pycord's DesignerView
