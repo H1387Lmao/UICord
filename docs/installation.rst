@@ -6,22 +6,6 @@ Installation
 .. note::
    This project requires Pycord version 2.7 or more
 
-Dependencies
-------------
-
-| To install the needed depedencies,
-| Windows:
-
-.. code-block:: console
-
-   PS> pip install -U pycord --pre
-
-| Linux:
-
-.. code-block:: console
-
-   $ python3 -m pip install -U py-cord --pre
-
 UICord
 ------
 
@@ -30,6 +14,7 @@ UICord
 .. code-block:: console
 
    $ git clone https://github.com/H1387Lmao/UICord.git --depth=1
+   $ pip install -r requirements.txt
    $ pip install .
 
 Check
