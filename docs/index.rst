@@ -1,19 +1,21 @@
 Welcome to UICord's Documentation!
 ==================================
 
-This is the main page for the UICord library.
+UICord is a Python library for helping make Components V2 in Pycord.
+
+.. note::
+   This project is currently in developement, any contributions is welcome!
+
+Contents
+--------
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   installation
    usage
-   examples
 
-Overview
---------
-
-UICord is a Python library for helping make Components V2 in Pycord.
 
 Example
 -------
