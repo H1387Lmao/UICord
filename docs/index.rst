@@ -1,17 +1,41 @@
-.. UICord documentation master file, created by
-   sphinx-quickstart on Mon Dec 15 22:04:16 2025.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Welcome to UICord's Documentation!
+==================================
 
-UICord documentation
-====================
-
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
-
+This is the main page for the UICord library.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   usage
+   examples
+
+Overview
+--------
+
+UICord is a Python library for helping make Components V2 in Pycord.
+
+Example
+-------
+
+Here’s a small example of how to use UICord:
+
+.. code-block:: python
+
+    from uicord import *
+
+    def ExampleView():
+        MyView = View()
+        MyButton = Button("MyButton", color=Colors.Green)
+        MyContainer = Container(
+            Text("Hello this is my text!"),
+            MyButton
+        )
+        MyView.add(MyContainer)
+
+        @interaction(component=MyButton)
+        async def clicked_on_button(ctx):
+            MyButton.label="Changed!"
+            await View.reload(ctx) #reloads the view, (Updates all the Component Buffers)
+
+        return MyView
