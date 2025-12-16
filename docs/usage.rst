@@ -24,13 +24,13 @@ Example
 
 .. code-block:: python
 
-   MyView = View()
-   MyBtn = Button()
-   MyView.add(MyBtn)
-   @uicord.interaction(component=MyBtn)
-   async def btnclick(ctx):
-       print("BUTTON WAS CLICKED!!!!")
-       await ctx.respond("Yay you clicked my button")
+    MyView = View()
+    MyBtn = Button()
+    MyView.add(MyBtn)
+    @uicord.interaction(component=MyBtn)
+    async def btnclick(ctx):
+        print("BUTTON WAS CLICKED!!!!")
+        await ctx.respond("Yay you clicked my button")
 
 Components
 ----------
