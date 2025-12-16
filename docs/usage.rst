@@ -1,7 +1,7 @@
 Components
 ==========
 
-View
+Layouts
 --------
 
 .. autoclass:: uicord.View
@@ -13,6 +13,26 @@ View
    :members:
    :undoc-members:
    :show-inheritance:
+
+Decorators
+----------
+
+.. autofunction:: uicord.interaction
+
+Example
+^^^^^^^
+
+.. code-block:: python
+    MyView = View()
+    MyBtn = Button()
+    MyView.add(MyBtn)
+    @uicord.interaction(component=MyBtn)
+    async def btnclick(ctx):
+        print("BUTTON WAS CLICKED!!!!")
+        await ctx.respond("Yay you clicked my button")
+
+Components
+----------
 
 .. autoclass:: uicord.Container
    :members:
@@ -60,6 +80,3 @@ View
    :members:
    :undoc-members:
    :show-inheritance:
-
-
-.. autofunction:: uicord.interaction

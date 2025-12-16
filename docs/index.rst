@@ -1,4 +1,4 @@
-Welcome to UICord's Documentation!
+UICord
 ==================================
 
 UICord is a Python library for helping make Components V2 in Pycord.
@@ -13,8 +13,8 @@ Contents
    :maxdepth: 2
    :caption: Contents:
 
-   Installation
-   Components
+   installation
+   usage
 
 
 Example
