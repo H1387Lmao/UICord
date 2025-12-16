@@ -20,7 +20,7 @@ Decorators
 .. autofunction:: uicord.interaction
 
 Example
-^^^^^^^
+"""""""
 
 .. code-block:: python
 
@@ -31,6 +31,7 @@ Example
     async def btnclick(ctx):
         print("BUTTON WAS CLICKED!!!!")
         await ctx.respond("Yay you clicked my button")
+
 
 Components
 ----------
