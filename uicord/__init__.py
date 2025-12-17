@@ -1,4 +1,5 @@
 import discord.ui as ui
+import discord
 from discord import enums
 from discord import SelectOption
 import inspect, functools
@@ -33,7 +34,10 @@ class View(ui.DesignerView):
 
 		:return: None
 		"""
-		await ctx.response.edit_message(view=self)
+		try:
+			await ctx.response.defer()
+		except discord.errors.InteractionResponded:
+			await ctx.edit_original_response(view=self)
 
 def interaction(component=None):
 	"""
@@ -42,7 +46,6 @@ def interaction(component=None):
 	:param component: The component to be assigned a callback.
 	:return: None
 	"""
-	@functools.wraps(func)
 	def wrapper(func):
 		if not component:
 			raise TypeError("Interaction needs a component")
@@ -145,14 +148,16 @@ class Choices(ui.Select):
 	"""
 	Options menu
 	"""
-	def __init__(self, placeholder="Pick"):
+	def __init__(self, type=discord.ComponentType.string_select, placeholder="Pick"):
 		"""
 		Creates a new select menu
 
 		:param placeholder: The text that is shown if no option is picked.
 		"""
-		super().__init__()
+		super().__init__(type)
 		self.placeholder=placeholder
+		self.component_type=type
+		self.DEFAULTOPTION=None
 	def add(self, 
 		option="Option", 
 		emoji=None,
@@ -167,46 +172,62 @@ class Choices(ui.Select):
 		:param description: The description of the choice.
 		:param default: If the input is default.
 		"""
-		self.options.append(
-			SelectOption(
-				label=option,
-				emoji=emoji,
-				description=description,
-				default=default,
-				value=option.replace(" ","-").lower()
-			)
+		option=SelectOption(
+			label=option,
+			emoji=emoji,
+			description=description,
+			default=default,
+			value=option.replace(" ","-").lower()
 		)
+		self.append_option(option)
+
+		if default:
+			self.DEFAULTOPTION=option
 	@property
 	def picked(self):
 		"""
 		The option picked by the user.
 		"""
+		if not self.values:
+			if self.DEFAULTOPTION:
+				return self.DEFAULTOPTION.value
+			return None
 		return self.values[0]
 	async def force(self, index):
 		"""
-		Force pick an option by index
+		Force pick an option by index 
+		DEPRECATED: NO LONGER SUPPORTED.
+		ANY CALL OF THIS METHOD NO LONGER WORKS.
 
 		:param index: The index to be forced
 		"""
-		selected = self.options[index%len(self.values)]
-		for opt in self.options:
-			opt.default = (selected==opt)
-		self.disabled = True
+		return
 	async def disable(self, v=True):
 		"""
 		Disables the select menu and updates.
 
 		:param v: Disabled or not.
 		"""
-		selected = self.values[0]
-		for opt in self.options:
-			opt.default = (selected==opt.value)
+		if self.component_type!=discord.ComponentType.channel_select:
+			selected = self.picked
+			if selected:
+				for opt in self.options:
+					opt.default = (selected==opt.value)
 		self.disabled = v
 	async def update(self):
 		"""
 		Updates the select menu buffer.
 		"""
-		self.disable(False)
+		if self.component_type!=discord.ComponentType.channel_select:
+			await self.disable(False)
+	async def callback(self, ctx):
+		"""
+		Default callback to update select menus.
+
+		:param ctx: Interaction context
+		"""
+		await self.update()
+		await self.view.reload(ctx)
 
 class Button(ui.Button):
 	"""
