@@ -3,6 +3,7 @@ import discord
 from discord import enums
 from discord import SelectOption
 import inspect, functools
+import traceback
 
 class Colors:
 	Green = 3
@@ -14,30 +15,40 @@ class Colors:
 	Yellow = 6
 
 class View(ui.DesignerView):
-	"""The main container of every component."""
-	def __init__(self):
-		"""Initializes the view"""
-		super().__init__()
+    """The main container of every component."""
+    def __init__(self, *items, owner=None):
+        """Initializes the view"""
+        super().__init__(*items, timeout=None)
+        self.owner=owner
+    async def interaction_check(self, ctx):
+        if self.owner is None: return True
+        if self.owner != ctx.user.id:
+            await ctx.response.send_message(
+                "This is not yours!",
+                ephemeral=True
+            )
+            return False
+        return True
 
-	def add(self, component):
-		"""
-		The component specified to the view
+    def add(self, component):
+        """
+        The component specified to the view
 
-		:param component: The component to be added
-		:return: Returns the component added.
-		"""
-		self.add_item(component)
-		return component
-	async def reload(self, ctx):
-		"""
-		Reloads the current view, Updates every unsynced compoenents.
+        :param component: The component to be added
+        :return: Returns the component added.
+        """
+        self.add_item(component)
+        return component
+    async def reload(self, ctx):
+        """
+        Reloads the current view, Updates every unsynced compoenents.
 
-		:return: None
-		"""
-		try:
-			await ctx.response.defer()
-		except discord.errors.InteractionResponded:
-			await ctx.edit_original_response(view=self)
+        :return: None
+        """
+        try:
+            await ctx.response.defer()
+        except discord.errors.InteractionResponded:
+            await ctx.edit_original_response(view=self)
 
 def interaction(component=None):
 	"""
@@ -55,8 +66,10 @@ def interaction(component=None):
 			try:
 				await func(*args)
 			except Exception as e:
-				print(f"\033[31m{e}",end="\033[0m\n")
+				print(f"\033[31m")
+				traceback.print_exc()
 				await args[0].respond(f"Error found while interacting with: {component.__class__.__name__}")
+				print("\033[0m")
 		if not isinstance(component, (Toggle, Text, ButtonChoices)):
 			component.callback = interact
 		else:
