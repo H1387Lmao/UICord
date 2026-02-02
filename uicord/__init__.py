@@ -68,7 +68,7 @@ def interaction(component=None):
 			except Exception as e:
 				print(f"\033[31m")
 				traceback.print_exc()
-				await args[0].respond(f"Error found while interacting with: {component.__class__.__name__}")
+				await args[0].respond(f"Error found while interacting with: {component.__class__.__name__}\nPlease contact the developer on this issue!", ephemeral=True)
 				print("\033[0m")
 		if not isinstance(component, (Toggle, Text, ButtonChoices)):
 			component.callback = interact
@@ -167,10 +167,9 @@ class Choices(ui.Select):
 
 		:param placeholder: The text that is shown if no option is picked.
 		"""
-		super().__init__(type)
-		self.placeholder=placeholder
-		self.component_type=type
+		super().__init__(type, placeholder=placeholder)
 		self.DEFAULTOPTION=None
+		self.component_type=type
 	def add(self, 
 		option="Option", 
 		emoji=None,
@@ -233,6 +232,8 @@ class Choices(ui.Select):
 		"""
 		if self.component_type!=discord.ComponentType.channel_select:
 			await self.disable(False)
+		elif self.component_type!=discord.ComponentType.user_select:
+			await self.disable(False)
 	async def callback(self, ctx):
 		"""
 		Default callback to update select menus.
@@ -246,7 +247,7 @@ class Button(ui.Button):
 	"""
 	Interactable Button.
 	"""
-	def __init__(self, text="My Button", emoji=None, color=Colors.Blue, url=None, id=None):
+	def __init__(self, text="My Button", emoji=None, color=Colors.Blue, url=None, id=None, disabled=False):
 		"""
 		Initial function for the button.
 
@@ -256,7 +257,7 @@ class Button(ui.Button):
 		:url: The url if its a link.
 		:id: The custom id for the button
 		"""
-		super().__init__(label=text, custom_id=id, style=color, url=url)
+		super().__init__(label=text, custom_id=id, style=color, url=url, disabled=disabled)
 		self.emoji = emoji
 	@property
 	def color(self):
@@ -314,6 +315,13 @@ class Thumbnail(ui.Thumbnail):
 	"""
 	def __init__(self, url):
 		super().__init__(url)
+
+class MediaGalleryItem(discord.MediaGalleryItem):
+	"""
+	Regular Discord MediaGalleryItem
+	"""
+	def __init__(self, *items, **kwargs):
+		super().__init__(*items, **kwargs)
 
 class Section(ui.Section):
 	"""
