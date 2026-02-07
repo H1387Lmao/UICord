@@ -161,13 +161,13 @@ class Choices(ui.Select):
 	"""
 	Options menu
 	"""
-	def __init__(self, type=discord.ComponentType.string_select, placeholder="Pick"):
+	def __init__(self, type=discord.ComponentType.string_select, placeholder="Pick", options=[]):
 		"""
 		Creates a new select menu
 
 		:param placeholder: The text that is shown if no option is picked.
 		"""
-		super().__init__(type, placeholder=placeholder)
+		super().__init__(type, placeholder=placeholder, options=options)
 		self.DEFAULTOPTION=None
 		self.component_type=type
 	def add(self, 
@@ -324,6 +324,13 @@ class MediaGalleryItem(discord.MediaGalleryItem):
 		super().__init__(*items, **kwargs)
 
 class Section(ui.Section):
+	"""
+	Regular Discord Section
+	"""
+	def __init__(self, *items, **kwargs):
+		super().__init__(*items, **kwargs)
+
+class MediaGallery(ui.MediaGallery):
 	"""
 	Regular Discord Section
 	"""
