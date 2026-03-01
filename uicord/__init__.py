@@ -247,7 +247,7 @@ class Button(ui.Button):
 	"""
 	Interactable Button.
 	"""
-	def __init__(self, text="My Button", emoji=None, color=Colors.Blue, url=None, id=None, disabled=False):
+	def __init__(self, text="My Button", emoji=None, color=Colors.Blue, url=None, id=None, disabled=False, callback=None):
 		"""
 		Initial function for the button.
 
@@ -259,6 +259,9 @@ class Button(ui.Button):
 		"""
 		super().__init__(label=text, custom_id=id, style=color, url=url, disabled=disabled)
 		self.emoji = emoji
+
+		if callback:
+			self.callback=callback
 	@property
 	def color(self):
 		"""
