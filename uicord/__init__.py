@@ -4,6 +4,17 @@ from discord import enums
 from discord import SelectOption
 import inspect, functools
 import traceback
+from .state import state
+
+EMPTY_CALLBACK = lambda *args, **kwargs: 0
+
+def format_values(values):
+	_values = []
+	for raw in values:
+		if raw.isdigit():
+			raw = int(raw)
+		raw = raw or None
+		_values.append(raw)
 
 class Colors:
 	Green = 3
@@ -63,13 +74,19 @@ def interaction(component=None):
 		if not inspect.iscoroutinefunction(func):
 			raise TypeError(f"{component.__class__.__name__} Interaction MUST be asynchronous")
 		async def interact(*args):
+			ctx = args[0]
 			try:
 				await func(*args)
 			except Exception as e:
-				print(f"\033[31m")
-				traceback.print_exc()
-				await args[0].respond(f"Error found while interacting with: {component.__class__.__name__}\nPlease contact the developer on this issue!", ephemeral=True)
-				print("\033[0m")
+				exc = traceback.format_exc()
+				for dev_id in state.DEV_IDS:
+					dev = ctx.client.get_user(dev_id)
+					if dev is None:
+						dev = await ctx.client.fetch_user(dev_id)
+
+					await dev.send(f"FROM: {ctx.user.mention}\nSERVER: `{ctx.guild.name}`\nCOMPONENT: {component.__class__.__name__}\n```\n{exc}\n```")
+				await ctx.respond(f"Error found while interacting with: {component.__class__.__name__}\nAlready contacted the developer on this issue!", ephemeral=True)
+				print(f"\033[91m{exc}\033[0m")
 		if not isinstance(component, (Toggle, Text, ButtonChoices)):
 			component.callback = interact
 		else:
@@ -124,14 +141,14 @@ class ButtonChoices(ui.ActionRow):
 				btn.style = self.saved_colors[i]
 				btn.active=False
 		await self.cb(ctx)
-	def add(self, button):
+	def add(self, button, id=None):
 		"""
 		Adds a button to the ButtonChoices
 
 		:param button: The button to be added.
 		"""
 		self.btns.append(button)
-		button.custom_id=button.label+"_id"
+		button.custom_id=id or button.label+"_id"
 		button.callback = self.callback
 		button.active=False
 		self.add_item(button)
@@ -247,7 +264,7 @@ class Button(ui.Button):
 	"""
 	Interactable Button.
 	"""
-	def __init__(self, text="My Button", emoji=None, color=Colors.Blue, url=None, id=None, disabled=False, callback=None):
+	def __init__(self, text="My Button", emoji=None, color=Colors.Grey, url=None, id=None, disabled=False, callback=None):
 		"""
 		Initial function for the button.
 
@@ -274,7 +291,7 @@ class Toggle(Button):
 	"""
 	Toggle button.
 	"""
-	def __init__(self, *args, **kwargs):
+	def __init__(self, *args, cb=EMPTY_CALLBACK, **kwargs):
 		"""
 		The init function
 		"""
@@ -282,6 +299,7 @@ class Toggle(Button):
 		self.active=False
 		self.style=Colors.Red
 		self.emoji="❌"
+		self.cb = cb
 
 	async def callback(self, ctx):
 		"""
@@ -353,7 +371,7 @@ class Modal(ui.DesignerModal):
 		"""
 		super().__init__(title=title)
 		self.inputs=[]
-	def add_input(self, label="input label", style="short", placeholder=None, default=None):
+	def add_input(self, label="input label", style="short", placeholder=None, default=None, required=True):
 		"""
 		Adds a new input
 
@@ -363,8 +381,25 @@ class Modal(ui.DesignerModal):
 		:param default: The default text.
 		"""
 		inp_style = enums.InputTextStyle.short if style=="short" else enums.InputTextStyle.paragraph
-		input_text = ui.InputText(style=inp_style, placeholder=placeholder, value=default)
-		self.add_item(
+		input_text = ui.InputText(style=inp_style, placeholder=placeholder, value=default, required=required)
+		super().add_item(
+			ui.Label(
+				label=label,
+				item=input_text
+			)
+		)
+		self.inputs.append(input_text)
+		return input_text
+	def add_item(self, label="input label", item=None, component=None):
+		"""
+		Adds a new input
+
+		:param label: The button label
+		:param item: The component to be put in the modal
+		:param component: Alias to item
+		"""
+		input_text = item or component
+		super().add_item(
 			ui.Label(
 				label=label,
 				item=input_text
@@ -379,6 +414,9 @@ class Modal(ui.DesignerModal):
 		:param ctx: The interaction context
 		"""
 		pass
+	@property
+	def values(self):
+		return [a.value for a in self.inputs]
 	async def get_value(self, index=0):
 		"""
 		Gets the value of a text input by index
