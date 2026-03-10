@@ -6,7 +6,8 @@ import inspect, functools
 import traceback
 from .state import state
 
-EMPTY_CALLBACK = lambda *args, **kwargs: 0
+async def EMPTY_CALLBACK(*args, **kwargs):
+    return 0
 
 def format_values(values):
 	_values = []
@@ -15,6 +16,7 @@ def format_values(values):
 			raw = int(raw)
 		raw = raw or None
 		_values.append(raw)
+	return _values
 
 class Colors:
 	Green = 3
@@ -291,14 +293,13 @@ class Toggle(Button):
 	"""
 	Toggle button.
 	"""
-	def __init__(self, *args, cb=EMPTY_CALLBACK, **kwargs):
+	def __init__(self, *args, cb=EMPTY_CALLBACK, default=True, **kwargs):
 		"""
 		The init function
 		"""
 		super().__init__(*args, **kwargs)
-		self.active=False
-		self.style=Colors.Red
-		self.emoji="❌"
+		self.active=default
+		self.emoji="❌" if not default else "✅"
 		self.cb = cb
 
 	async def callback(self, ctx):
@@ -307,13 +308,11 @@ class Toggle(Button):
 
 		:param ctx: The interaction context
 		"""
-		if active:
-			self.style=Colors.Red
+		if self.active:
 			self.emoji="❌"
 		else:
-			self.style=Colors.Green
 			self.emoji="✅"
-		self.active is not active
+		self.active = not self.active
 		await self.cb(ctx)
 
 class Container(ui.Container):
