@@ -293,13 +293,15 @@ class Toggle(Button):
 	"""
 	Toggle button.
 	"""
-	def __init__(self, *args, cb=EMPTY_CALLBACK, default=True, **kwargs):
+	def __init__(self, *args, cb=EMPTY_CALLBACK, default=True, custom_on=None, custom_off=None**kwargs):
 		"""
 		The init function
 		"""
 		super().__init__(*args, **kwargs)
 		self.active=default
-		self.emoji="❌" if not default else "✅"
+		self.off_button=custom_off or "❌"
+		self.on_button=custom_on or "✅"
+		self.emoji=self.off_button if not default else self.on_button
 		self.cb = cb
 
 	async def callback(self, ctx):
@@ -309,9 +311,9 @@ class Toggle(Button):
 		:param ctx: The interaction context
 		"""
 		if self.active:
-			self.emoji="❌"
+			self.emoji=self.off_button
 		else:
-			self.emoji="✅"
+			self.emoji=self.on_button
 		self.active = not self.active
 		await self.cb(ctx)
 
