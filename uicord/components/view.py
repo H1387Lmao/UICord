@@ -135,12 +135,12 @@ def interaction(component=None):
                 )
                 print(f"\033[91m{exc}\033[0m")
 
-        # Toggle / Text / ButtonChoices use `.cb`; everything else uses `.callback`
+        # Toggle / Text / RadioButtons use `.cb`; everything else uses `.callback`
         from uicord.components.buttons import Toggle
         from uicord.components.text    import Text
-        from uicord.components.choices import ButtonChoices
+        from uicord.components.choices import RadioButtons
 
-        if not isinstance(component, (Toggle, Text, ButtonChoices)):
+        if not isinstance(component, (Toggle, Text, RadioButtons)):
             component.callback = interact
         else:
             component.cb = interact

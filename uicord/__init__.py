@@ -28,7 +28,7 @@ uicord/
     ├── helpers.py            ← EMPTY_CALLBACK, format_values
     ├── text.py               ← Text display
     ├── buttons.py            ← Button, Toggle
-    ├── choices.py            ← Choices (select), ButtonChoices (radio btns)
+    ├── choices.py            ← Choices (select), RadioButtons RadioButtonOption (radio btns)
     ├── layout.py             ← ActionRow, Container, Separator, Section,
     │                            Thumbnail, MediaGallery, MediaGalleryItem
     ├── view.py               ← View, interaction() decorator
@@ -62,7 +62,8 @@ from uicord.components import (
     Toggle,
     # Select / radio
     Choices,
-    ButtonChoices,
+    RadioButtons,
+    RadioButtonOption,
     # Layout
     ActionRow,
     Container,
@@ -98,7 +99,8 @@ __all__ = [
     "Toggle",
     # Select / radio
     "Choices",
-    "ButtonChoices",
+    "RadioButtons",
+    "RadioButtonOption",
     # Layout
     "ActionRow",
     "Container",

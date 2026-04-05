@@ -101,63 +101,71 @@ class Choices(ui.Select):
         await self.update()
         await self.view.reload(ctx)
 
+class RadioButtonOption:
+    def __init__(self, label: str, value, default: bool = False):
+        self.label = label
+        self.value = value
+        self.default = default
 
-class ButtonChoices(ui.ActionRow):
-    """
-    Radio-button group - only one button can be *active* at a time.
 
-    Parameters
-    ----------
-    *btns:
-        Initial :class:`~uicord.Button` objects (optional).
-    """
-
-    def __init__(self, *btns):
+class RadioButtons(ui.ActionRow):
+    def __init__(self, *, options: RadioButtonOption=[], custom_on="✔", custom_off="✖"):
         super().__init__()
-        self.btns        = []
-        self.saved_colors = []
-        self.picked      = None
+        self.btns: list[ui.Button] = []
+        self.map: dict[str, RadioButtonOption] = {}
 
-    async def cb(self, ctx) -> None:
-        """Called after the selection changes.  Override to customise behaviour."""
+        self.custom_on = custom_on
+        self.custom_off = custom_off
+
+        self.picked: RadioButtonOption | None = None
+
+        for opt in options:
+            self.add(opt)
+
+    @property
+    def value(self):
+        return self.picked.value if self.picked else None
+
+    async def cb(self, ctx):
         await ctx.response.edit_message(view=self.view)
 
-    async def callback(self, ctx) -> None:
-        """Internal callback that handles the radio-button logic."""
+    async def callback(self, ctx):
         pressed = ctx.data["custom_id"]
-        for i, btn in enumerate(self.btns):
-            if btn.custom_id == pressed:
-                if btn.active:
-                    btn.style = self.saved_colors[i]
-                    self.picked = None
-                    btn.active  = False
-                else:
-                    btn.style = (
-                        Colors.Green
-                        if self.saved_colors[i] != Colors.Green
-                        else Colors.Red
-                    )
-                    self.picked = btn.label
-                    btn.active  = True
-            else:
-                btn.style  = self.saved_colors[i]
-                btn.active = False
+
+        if self.picked and pressed == self._id_of(self.picked):
+            return await self.cb(ctx)
+        else:
+            self.picked = self.map.get(pressed)
+
+
+        for btn in self.btns:
+            active = self.picked and btn.custom_id == self._id_of(self.picked)
+            btn.active = bool(active)
+            btn.emoji = self.custom_on if active else self.custom_off
+
         await self.cb(ctx)
 
-    def add(self, button, id: str | None = None):
-        """
-        Add *button* to the group.
+    def _id_of(self, option: RadioButtonOption) -> str:
+        for cid, opt in self.map.items():
+            if opt is option:
+                return cid
+        return ""
 
-        Parameters
-        ----------
-        button:
-            A :class:`~uicord.Button` instance.
-        id:
-            Custom ID override; defaults to ``button.label + "_id"``.
-        """
+    def add(self, option: RadioButtonOption, id: str | None = None):
+        cid = id or option.label + "_id"
+
+        button = ui.Button(
+            label=option.label,
+            emoji=self.custom_on if option.default else self.custom_off
+        )
+
+        button.custom_id = cid
+        button.callback = self.callback
+        button.active = option.default
+
+        self.map[cid] = option
         self.btns.append(button)
-        button.custom_id  = id or button.label + "_id"
-        button.callback   = self.callback
-        button.active     = False
         self.add_item(button)
-        self.saved_colors.append(button.color)
+
+        if option.default:
+            self.picked = option
