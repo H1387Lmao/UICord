@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "UICord"
-version = "3.1.5"
+version = "4.0.0"
 description = "Components V2 helper for Discord bots"
 requires-python = ">=3.8"
 
