@@ -46,7 +46,7 @@ class Button(ui.Button):
         if text is None and emoji is None:
             text = "\u200b"
         super().__init__(
-            label=text
+            label=text,
             custom_id=id,
             style=color,
             url=url,
