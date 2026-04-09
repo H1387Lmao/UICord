@@ -3,10 +3,17 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "UICord"
-version = "4.0.1"
+name = "uicord"
+version = "4.0.6"
 description = "Components V2 helper for Discord bots"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
+dependencies = ["py-cord>=2.7"]
+readme = "README.md"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/uicord"
+Repository = "https://github.com/yourusername/uicord"
+BugTracker = "https://github.com/yourusername/uicord/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -23,3 +30,4 @@ uicord = { workspace = true }
 dev = [
     "uicord",
 ]
+

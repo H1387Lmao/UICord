@@ -23,7 +23,7 @@ A UI helper library for [pycord](https://github.com/Pycord-Development/pycord) t
 ## Installation
 
 ```bash
-pip install git+https://github.com/H1387Lmao/UICord
+pip install uicord
 ```
 
 Requires **pycord ≥ 2.7**.
