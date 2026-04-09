@@ -19,6 +19,8 @@ class Button(ui.Button):
     ----------
     text:
         Label shown on the button.
+    label:
+        Alias for text.
     emoji:
         Optional emoji displayed alongside the label.
     color:
@@ -36,6 +38,7 @@ class Button(ui.Button):
     def __init__(
         self,
         text:     str         = "My Button",
+        label:    str         = None,
         emoji                 = None,
         color:    int         = Colors.Grey,
         url:      str | None  = None,
@@ -43,6 +46,7 @@ class Button(ui.Button):
         disabled: bool        = False,
         callback              = None,
     ):
+        text=text or label
         if text is None and emoji is None:
             text = "\u200b"
         super().__init__(

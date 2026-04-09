@@ -84,7 +84,8 @@ label = view._("btn.confirm")   # → translated to Japanese
 | `Modal` | Input/output modal with label helpers |
 | `Button` | Interactable button |
 | `Toggle` | Stateful on/off button |
-| `ButtonChoices` | Radio-style button group |
+| `RadioButtons` | Radio-button group |
+| `RadioButtonOption` | Option inside "Radio buttons" component|
 | `Choices` | Select / drop-down menu |
 | `ActionRow` | Manual row layout |
 | `Container` | Component container |

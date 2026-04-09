@@ -102,10 +102,11 @@ class Choices(ui.Select):
         await self.view.reload(ctx)
 
 class RadioButtonOption:
-    def __init__(self, label: str, value, default: bool = False):
+    def __init__(self, label: str, value, default: bool = False, disabled=False):
         self.label = label
         self.value = value
         self.default = default
+        self.disabled=disabled
 
 
 class RadioButtons(ui.ActionRow):
@@ -119,7 +120,11 @@ class RadioButtons(ui.ActionRow):
 
         self.picked: RadioButtonOption | None = None
 
+        self._has_default=True
+
         for opt in options:
+            if opt.default and opt.disabled:
+                opt.default=False
             self.add(opt)
 
     @property
@@ -156,7 +161,8 @@ class RadioButtons(ui.ActionRow):
 
         button = ui.Button(
             label=option.label,
-            emoji=self.custom_on if option.default else self.custom_off
+            emoji=self.custom_on if option.default else self.custom_off,
+            disabled=option.disabled
         )
 
         button.custom_id = cid
