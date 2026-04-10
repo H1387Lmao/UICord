@@ -22,6 +22,10 @@ class _State:
         import mylib
         mylib.state.translator_function = my_translate_fn
     """
+    DEV_CMDS = {}
+    """
+    Commands used in developer panel.
+    """
 
 
 state = _State()

@@ -12,6 +12,7 @@ from discord import SelectOption
 from uicord.components.colors  import Colors
 from uicord.components.helpers import EMPTY_CALLBACK
 
+Choice = SelectOption
 
 class Choices(ui.Select):
     """
@@ -25,6 +26,8 @@ class Choices(ui.Select):
         Hint text shown when nothing is selected.
     options:
         Pre-built list of :class:`discord.SelectOption` objects.
+    required:
+        Checks if the Select menu is required inside a modal.
     """
 
     def __init__(
@@ -32,8 +35,9 @@ class Choices(ui.Select):
         type        = discord.ComponentType.string_select,
         placeholder = "Pick",
         options     = [],
+        required    = False
     ):
-        super().__init__(type, placeholder=placeholder, options=options)
+        super().__init__(type, placeholder=placeholder, options=options, required=required)
         self.DEFAULTOPTION  = None
         self.component_type = type
 

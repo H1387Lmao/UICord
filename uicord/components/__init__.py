@@ -2,7 +2,7 @@ from .colors   import Colors
 from .helpers  import EMPTY_CALLBACK, format_values
 from .text     import Text
 from .buttons  import Button, Toggle
-from .choices  import Choices, RadioButtons, RadioButtonOption
+from .choices  import Choices, Choice, RadioButtons, RadioButtonOption
 from .layout   import (
     ActionRow,
     Container,
@@ -24,6 +24,7 @@ __all__ = [
     "Button",
     "Toggle",
     "Choices",
+    "Choice",
     "RadioButtons",
     "RadioButtonOption",
     "ActionRow",

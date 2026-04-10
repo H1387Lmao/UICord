@@ -90,7 +90,7 @@ class Modal(ui.DesignerModal):
         self,
         label:     str  = "input label",
         item              = None,
-        component         = None,
+        component         = None
     ):
         """
         Add an arbitrary component to the modal wrapped in a :class:`ui.Label`.
@@ -101,7 +101,8 @@ class Modal(ui.DesignerModal):
             The label shown above the component.
         item / component:
             The component to add (either keyword works).
-
+        required:
+            Whether the user requires a item to fill in
         Returns
         -------
         The component that was added.

@@ -62,6 +62,7 @@ from uicord.components import (
     Toggle,
     # Select / radio
     Choices,
+    Choice,
     RadioButtons,
     RadioButtonOption,
     # Layout
@@ -99,6 +100,7 @@ __all__ = [
     "Toggle",
     # Select / radio
     "Choices",
+    "Choice",
     "RadioButtons",
     "RadioButtonOption",
     # Layout
