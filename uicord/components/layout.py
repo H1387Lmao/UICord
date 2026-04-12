@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import discord
 import discord.ui as ui
+from .view import unpack_items
 
 # ---------------------------------------------------------------------------
 # ActionRow
@@ -44,7 +45,7 @@ class Container(ui.Container):
     """A regular Discord container component."""
 
     def __init__(self, *items, **kwargs):
-        super().__init__(*items, **kwargs)
+        super().__init__(*unpack_items(items), **kwargs)
 
 
 # ---------------------------------------------------------------------------
@@ -66,7 +67,7 @@ class Section(ui.Section):
     """A regular Discord section component."""
 
     def __init__(self, *items, **kwargs):
-        super().__init__(*items, **kwargs)
+        super().__init__(*unpack_items(items), **kwargs)
 
 
 # ---------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 from .colors   import Colors
 from .helpers  import EMPTY_CALLBACK, format_values
-from .text     import Text
+from .text     import Text, GridItem, Grid
 from .buttons  import Button, Toggle
 from .choices  import Choices, Choice, RadioButtons, RadioButtonOption
 from .layout   import (
@@ -21,6 +21,8 @@ __all__ = [
     "EMPTY_CALLBACK",
     "format_values",
     "Text",
+    "Grid",
+    "GridItem",
     "Button",
     "Toggle",
     "Choices",

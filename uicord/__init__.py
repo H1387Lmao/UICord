@@ -57,6 +57,8 @@ from uicord.components import (
     format_values,
     # Basic display
     Text,
+    GridItem,
+    Grid,
     # Buttons
     Button,
     Toggle,
@@ -95,6 +97,8 @@ __all__ = [
     "format_values",
     # Display
     "Text",
+    "GridItem",
+    "Grid",
     # Buttons
     "Button",
     "Toggle",

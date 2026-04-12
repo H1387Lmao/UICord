@@ -45,7 +45,7 @@ bot = commands.Bot(command_prefix="!")
 async def demo(ctx):
     view = uicord.View(owner=ctx.author.id)
     btn  = uicord.Button("Click me!", color=uicord.Colors.Blue)
-    view.add(btn)
+    view.add(ActionRow(btn))
 
     @uicord.interaction(component=btn)
     async def on_click(ictx):
@@ -95,6 +95,8 @@ label = view._("btn.confirm")   # → translated to Japanese
 | `MediaGallery` | Media gallery block *(pycord ≥ 2.7)* |
 | `MediaGalleryItem` | Item inside a MediaGallery *(pycord ≥ 2.7)* |
 | `Text` | Text display |
+| `GridItem` | Item inside a Grid |
+| `Grid` | Grid display |
 | `Checkbox` | Single checkbox *(pycord ≥ 2.8)* |
 | `CheckboxGroup` | Group of checkboxes *(pycord ≥ 2.8)* |
 | `UIString` | Translatable string subclass |

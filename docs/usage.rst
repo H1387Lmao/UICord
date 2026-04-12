@@ -62,6 +62,14 @@ Components
    :undoc-members:
    :show-inheritance:
 
+.. autoclass:: uicord.Grid
+   :members:
+   :undoc-members:
+
+.. autoclass:: uicord.GridItem
+   :members:
+   :undoc-members:
+
 .. autoclass:: uicord.Separator
    :members:
    :undoc-members:

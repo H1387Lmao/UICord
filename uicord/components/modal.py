@@ -8,7 +8,6 @@ from __future__ import annotations
 import discord
 import discord.ui as ui
 from discord import enums
-
 from uicord.lang.uistring import UIString
 
 

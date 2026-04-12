@@ -14,6 +14,23 @@ import discord.ui as ui
 from uicord.state import state
 from uicord.lang.uistring import UIString
 
+def unpack_items(
+    items
+):
+    _unpacked=[]
+    for item in items:
+        if not item: continue
+        elif isinstance(item, (list, tuple)):
+            _unpacked.extend(
+                unpack_items(items)
+            )
+        elif hasattr(item, "build"):
+            _unpacked.append(
+                item.build()
+            )
+        else:
+            _unpacked.append(item)
+    return _unpacked
 
 class View(ui.DesignerView):
     """
@@ -32,7 +49,7 @@ class View(ui.DesignerView):
     """
 
     def __init__(self, *items, owner: int | None = None, lang: str | None = None):
-        super().__init__(*items, timeout=None)
+        super().__init__(*unpack_items(items), timeout=None)
         self.owner = owner
         self.lang  = lang
 
