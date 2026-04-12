@@ -61,9 +61,9 @@ class Grid:
         width: int = 30
     ):
         self.texts = texts or []
-        self.rows = rows
-        self.cols = cols or (len(self.texts) // rows or 1)
-
+        self.rows  = rows
+        self.cols  = cols or (len(self.texts) // rows or 1)
+        self.width = width
     def build(self):
         x = 0
         res = ""
@@ -78,7 +78,7 @@ class Grid:
             
             res += (
                 f"{item.emoji or ''}"
-                f"`{item.text}{' ' * padding}`"
+                f"`{padded}`"
             )
 
             x += 1
