@@ -22,7 +22,7 @@ def unpack_items(
         if not item: continue
         elif isinstance(item, (list, tuple)):
             _unpacked.extend(
-                unpack_items(items)
+                unpack_items(item)
             )
         elif hasattr(item, "build"):
             _unpacked.append(
