@@ -64,34 +64,43 @@ class Grid:
         self.rows  = rows
         self.cols  = cols or (len(self.texts) // rows or 1)
         self.width = width
+
     def build(self):
-        x = 0
-        res = ""
         cell_width = self.width // self.cols
-        code_form = False
+        res = ""
 
-        for item in self.texts:
-            text=item.text
-            if len(text) > cell_width - 2:
-                text = text[:cell_width - 3] + "…"
-            
-            padded = text + " " * (cell_width - len(text))
+        row_cells = []
+        emojis = []
 
-            if not code_form:
-                padded = '`'+padded
-                code_form = True
-            if code_form and item.emoji:
-                padded+='`'
-                code_form = False
-            res += (
-                f"{item.emoji or ''}"
-                f"{padded}"
-            )
+        for i, item in enumerate(self.texts):
+            text = item.text
 
-            x += 1
-            if x == self.cols:
-                res += "`\n"
-                x = 0
-                code_form = False
+            if len(text) > cell_width - 1:
+                text = text[:cell_width - 2] + "…"
+
+            padded = text.ljust(cell_width)
+
+            row_cells.append(padded)
+            emojis.append(item.emoji or "")
+
+                prefix = " ".join(e for e in emojis if e)
+                content = "".join(row_cells)
+
+                if prefix:
+                    res += f"{prefix} `{content}`\n"
+                else:
+                    res += f"`{content}`\n"
+
+                row_cells = []
+                emojis = []
+
+        if row_cells:
+            content = "".join(row_cells)
+            prefix = " ".join(e for e in emojis if e)
+
+            if prefix:
+                res += f"{prefix} `{content}`"
+            else:
+                res += f"`{content}`"
 
         return Text(res)
