@@ -68,6 +68,7 @@ class Grid:
         x = 0
         res = ""
         cell_width = self.width // self.cols
+        code_form = False
 
         for item in self.texts:
             text=item.text
@@ -75,15 +76,22 @@ class Grid:
                 text = text[:cell_width - 3] + "…"
             
             padded = text + " " * (cell_width - len(text))
-            
+
+            if not code_form:
+                padded = '`'+padded
+                code_form = True
+            if code_form and item.emoji:
+                padded+='`'
+                code_form = False
             res += (
                 f"{item.emoji or ''}"
-                f"`{padded}`"
+                f"{padded}"
             )
 
             x += 1
             if x == self.cols:
-                res += "\n"
+                res += "`\n"
                 x = 0
+                code_form = False
 
         return Text(res)

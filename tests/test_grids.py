@@ -33,13 +33,13 @@ def test_create_griditem_em():
     ])==4
 
 def test_grid_content():
-    assert isinstance(
-        uicord.Grid(texts=[
+    content = uicord.Grid(
+        texts=[
             uicord.GridItem(
                 "Hi", "👋"
             ),
             uicord.GridItem(
-                "Hello", "👋"
+                "Hello"
             ),
             uicord.GridItem(
                 "Hey", "👋"
@@ -47,5 +47,9 @@ def test_grid_content():
             uicord.GridItem(
                 "Heyo", "👋"
             )
-        ]).build(), uicord.Text
+        ]
+    ).build()
+    print(content)
+    assert isinstance(
+        content, uicord.Text
     )
