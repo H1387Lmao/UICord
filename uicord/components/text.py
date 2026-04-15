@@ -83,16 +83,15 @@ class Grid:
             row_cells.append(padded)
             emojis.append(item.emoji or "")
 
-                prefix = " ".join(e for e in emojis if e)
-                content = "".join(row_cells)
+            prefix = " ".join(e for e in emojis if e)
+            content = "".join(row_cells)
 
-                if prefix:
-                    res += f"{prefix} `{content}`\n"
-                else:
-                    res += f"`{content}`\n"
-
-                row_cells = []
-                emojis = []
+            if prefix:
+                res += f"{prefix} `{content}`\n"
+            else:
+                res += f"`{content}`\n"
+            row_cells = []
+            emojis = []
 
         if row_cells:
             content = "".join(row_cells)
