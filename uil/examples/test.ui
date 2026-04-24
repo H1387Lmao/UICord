@@ -1,24 +1,21 @@
-import other
-
 @home(prof, uid, page){
 	elements = []
 	elements.append(
-		ActionRow[
-			Button[
-				text: "Click me"
+		ActionRow(
+			Button(
+				text: "Click me",
 				emoji: null,
 				id: "HelloBTN"
-			],
-			Button[
+			),
+			Button(
 				text: "Dont click me",
 				emoji: null,
 				id: "Dont"
-			]
-		]
+			)
+		)
 	)
 	
-	HelloBTN.interact(i)
-	{
+	HelloBTN::interact(i) => {
 		await i.respond(
 			"You clicked me!"
 		)
@@ -32,8 +29,8 @@ import other
 
 	Dont.attach(why)
 	
-	-> View[
+	-> View(
 		elements,
 		uid: uid
-	]
+	)
 }
