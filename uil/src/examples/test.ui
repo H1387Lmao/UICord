@@ -1,0 +1,39 @@
+import other
+
+@home(prof, uid, page){
+	elements = []
+	elements.append(
+		ActionRow[
+			Button[
+				text: "Click me"
+				emoji: null,
+				id: "HelloBTN"
+			],
+			Button[
+				text: "Dont click me",
+				emoji: null,
+				id: "Dont"
+			]
+		]
+	)
+	
+	HelloBTN.interact(i)
+	{
+		await i.respond(
+			"You clicked me!"
+		)
+	}
+
+	@why(i){
+		await i.response.edit_message(
+			view: other.warning(prof, uid)
+		)
+	}
+
+	Dont.attach(why)
+	
+	-> View[
+		elements,
+		uid: uid
+	]
+}

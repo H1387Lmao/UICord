@@ -30,7 +30,7 @@ class ActionRow(ui.ActionRow):
     """
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(*unpack_items(args), **kwargs)
 
     def add(self, *a, **k):
         """Macro for :meth:`add_item`."""

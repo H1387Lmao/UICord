@@ -81,7 +81,7 @@ class Grid:
             padded = text.ljust(cell_width)
 
             row_cells.append(padded)
-            emojis.append(item.emoji or "")
+            emojis.append(str(item.emoji) or "")
 
             prefix = " ".join(e for e in emojis if e)
             content = "".join(row_cells)

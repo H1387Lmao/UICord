@@ -138,12 +138,15 @@ def interaction(component=None):
                     dev = ctx.client.get_user(dev_id)
                     if dev is None:
                         dev = await ctx.client.fetch_user(dev_id)
-                    await dev.send(
-                        f"FROM: {ctx.user.mention}\n"
-                        f"SERVER: `{ctx.guild.name}`\n"
-                        f"COMPONENT: {component.__class__.__name__}\n"
-                        f"```\n{exc}\n```"
-                    )
+                    try:
+                        await dev.send(
+                            f"FROM: {ctx.user.mention}\n"
+                            f"SERVER: `{ctx.guild.name if ctx.guild else "DMS"}`\n"
+                            f"COMPONENT: {component.__class__.__name__}\n"
+                            f"```\n{exc}\n```"
+                        )
+                    except:
+                        pass
                 await ctx.respond(
                     f"Error found while interacting with: "
                     f"{component.__class__.__name__}\n"
