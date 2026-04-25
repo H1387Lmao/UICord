@@ -44,12 +44,12 @@ def p_STMTRET(p):
 def p_STMTCALL(p):                                        
     """
     call : expr LPAREN args RPAREN
-    """                                                   
+    """
     p[0]=AstNode(                                             
         "CALL",
         target=p[1],
         args=p[3],
-        awaited=False      
+        awaited=False
     )
     
 def p_AWAITCALL(p):

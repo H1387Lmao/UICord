@@ -21,4 +21,4 @@ uiLogger.print(
     AstView(AST)
 )
 comp = cs.Compiler([AST])
-uiLogger.print_code(comp.code)
+(uiLogger.print_code(comp.code))
