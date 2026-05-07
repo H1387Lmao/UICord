@@ -1,0 +1,11 @@
+View(
+	ActionRow(
+		Button(
+			"Click",
+			gid: "ClickButton"
+		),
+		gid: "MyActionRow"
+	)
+)
+
+print(ClickButton)

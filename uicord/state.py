@@ -26,6 +26,14 @@ class _State:
     """
     Commands used in developer panel.
     """
+    bot = None
+    """
+    Needed to pass around the bot instance
+    """
+    views = {}
+    """
+    Structure to store views
+    """
 
 
 state = _State()

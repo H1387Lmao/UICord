@@ -26,9 +26,10 @@ uicord/
     ├── __init__.py
     ├── colors.py             ← Colors constants
     ├── helpers.py            ← EMPTY_CALLBACK, format_values
-    ├── text.py               ← Text display
+    ├── text.py               ← Text display, Grid, GridItems
     ├── buttons.py            ← Button, Toggle
     ├── choices.py            ← Choices (select), RadioButtons RadioButtonOption (radio btns)
+    ├── pages.py              ← page_button()
     ├── layout.py             ← ActionRow, Container, Separator, Section,
     │                            Thumbnail, MediaGallery, MediaGalleryItem
     ├── view.py               ← View, interaction() decorator
@@ -84,6 +85,8 @@ from uicord.components import (
     # Pycord 2.8+  (NotImplementedError if not installed)
     Checkbox,
     CheckboxGroup,
+    # navigation
+    page_buttons
 )
 
 __all__ = [
