@@ -23,13 +23,18 @@ def p_STMTASSIGN(p):
 
 def p_FNDECL(p):
     """
-    expr : AT ID LPAREN params RPAREN scope               
+    expr : AT ID LPAREN params RPAREN scope
+         | AT async ID LPAREN params RPAREN scope
     """
+    offset=0
+    if p[2]=="async":
+        offset=1
     p[0]=AstNode(                                             
         "FNDECL",                                             
-        target=p[2],
-        params=p[4],
-        stmts=p[6]                                        
+        target=p[2+offset],
+        params=p[4+offset],
+        stmts=p[6+offset],
+        asynchronous=bool(offset)
     )
 
 def p_STMTRET(p):

@@ -5,9 +5,9 @@ components/text.py
 """
 from __future__ import annotations
 import discord.ui as ui
+from .core import *
 
-
-class Text(ui.TextDisplay):
+class Text(ui.TextDisplay, UIMember):
     """
     Text display for a :class:`~uicord.View` or
     :class:`~uicord.Modal`.
@@ -21,7 +21,7 @@ class Text(ui.TextDisplay):
     def __init__(self, text: str = "myText"):
         super().__init__(text)
 
-class GridItem:
+class GridItem(UIMember):
     """
     Item for a :class:`~uicord.Grid`
 
@@ -37,7 +37,7 @@ class GridItem:
         self.text = text
         self.emoji = emoji
 
-class Grid:
+class Grid(UIMember):
     """
     Grid display for a :class:`~uicord.View`
     

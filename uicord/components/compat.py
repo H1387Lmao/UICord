@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import discord
 import discord.ui as ui
+from .core import *
 
 # ---------------------------------------------------------------------------
 # Pycord 2.7 - role_select (and other typed selects)
@@ -53,7 +54,7 @@ def _make_stub(name: str, version: str):
 
 
 if hasattr(ui, "Checkbox"):
-    class Checkbox(ui.Checkbox):  # type: ignore[misc]
+    class Checkbox(ui.Checkbox, UIMember):  # type: ignore[misc]
         """
         A Discord checkbox component (pycord ≥ 2.8).
 
@@ -94,7 +95,7 @@ else:
 
 
 if hasattr(ui, "CheckboxGroup"):
-    class CheckboxGroup(ui.CheckboxGroup):  # type: ignore[misc]
+    class CheckboxGroup(ui.CheckboxGroup, UIMember):  # type: ignore[misc]
         """
         A group of Discord checkboxes (pycord ≥ 2.8).
 

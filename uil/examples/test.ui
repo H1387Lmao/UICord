@@ -21,7 +21,7 @@
 		)
 	}
 
-	@why(i){
+	@async why(i){
 		await i.response.edit_message(
 			view: other.warning(prof, uid)
 		)

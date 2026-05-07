@@ -14,12 +14,13 @@ from __future__ import annotations
 import discord
 import discord.ui as ui
 from .view import unpack_items
+from .core import *
 
 # ---------------------------------------------------------------------------
 # ActionRow
 # ---------------------------------------------------------------------------
 
-class ActionRow(ui.ActionRow):
+class ActionRow(ui.ActionRow, UIMember):
     """
     A regular pycord :class:`discord.ui.ActionRow`.
 
@@ -41,7 +42,7 @@ class ActionRow(ui.ActionRow):
 # Container
 # ---------------------------------------------------------------------------
 
-class Container(ui.Container):
+class Container(ui.Container, UIMember):
     """A regular Discord container component."""
 
     def __init__(self, *items, **kwargs):
@@ -52,7 +53,7 @@ class Container(ui.Container):
 # Separator
 # ---------------------------------------------------------------------------
 
-class Separator(ui.Separator):
+class Separator(ui.Separator, UIMember):
     """A regular Discord separator component."""
 
     def __init__(self, *, divider: bool = True):
@@ -63,7 +64,7 @@ class Separator(ui.Separator):
 # Section
 # ---------------------------------------------------------------------------
 
-class Section(ui.Section):
+class Section(ui.Section, UIMember):
     """A regular Discord section component."""
 
     def __init__(self, *items, **kwargs):
@@ -74,7 +75,7 @@ class Section(ui.Section):
 # Thumbnail
 # ---------------------------------------------------------------------------
 
-class Thumbnail(ui.Thumbnail):
+class Thumbnail(ui.Thumbnail, UIMember):
     """A regular Discord thumbnail component."""
 
     def __init__(self, url: str):
@@ -85,7 +86,7 @@ class Thumbnail(ui.Thumbnail):
 # MediaGallery / MediaGalleryItem  (pycord ≥ 2.7)
 # ---------------------------------------------------------------------------
 
-class MediaGallery(ui.MediaGallery):
+class MediaGallery(ui.MediaGallery, UIMember):
     """A regular Discord media gallery component."""
 
     def __init__(self, *items, **kwargs):
@@ -94,14 +95,14 @@ class MediaGallery(ui.MediaGallery):
 
 # MediaGalleryItem lives on `discord` (not `discord.ui`) in pycord 2.7+
 if hasattr(discord, "MediaGalleryItem"):
-    class MediaGalleryItem(discord.MediaGalleryItem):
+    class MediaGalleryItem(discord.MediaGalleryItem, UIMember):
         """A regular Discord media gallery item."""
 
         def __init__(self, *items, **kwargs):
             super().__init__(*items, **kwargs)
 else:
     # Stub so imports don't break on older versions
-    class MediaGalleryItem:  # type: ignore[no-redef]
+    class MediaGalleryItem(UIMember):  # type: ignore[no-redef]
         """Placeholder - not available in this pycord version."""
 
         def __init__(self, *items, **kwargs):

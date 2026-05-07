@@ -1,7 +1,7 @@
 import re
 from .core import AstNode
 
-kwrds=("await", )
+kwrds=("await", "async")
 
 RULES = {
     r"\+": "PLUS",

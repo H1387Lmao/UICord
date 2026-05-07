@@ -50,7 +50,7 @@ Example:
         )
     }
 
-    @why(i){
+    @async why(i){
         await i.response.edit_message(
             view: other.warning(prof, uid)
         )
@@ -72,12 +72,12 @@ def home(prof,uid,page):
   HelloBTN=Button(text='Click me',emoji=null)
   Dont=Button(text='Dont click me',emoji=null)
   elements.append(ActionRow(HelloBTN,Dont))
-  def lambda_0(i):
-    i.respond('You clicked me!')
+  async def lambda_0(i):
+    await i.respond('You clicked me!')
 
   HelloBTN.interact=lambda_0
-  def why(i):
-    i.response.edit_message(view=other.warning(prof,uid))
+  async def why(i):
+    await i.response.edit_message(view=other.warning(prof,uid))
 
   Dont.attach(why)
   return View(elements,uid=uid)
@@ -85,12 +85,14 @@ def home(prof,uid,page):
 
 - UI management using `uil.load_uis`
 
-```
+```py
 import uicord.uil as uil
 uil.load_uis("./my_uis")
 
 print(uicord.state.uis) # will have every file you have in your ui folder as modules.
 ```
+
+- Single File UI Testing with `python -m uicord.uil examples/test.uil`
 
 ---
 

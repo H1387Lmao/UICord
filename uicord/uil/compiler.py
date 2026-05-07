@@ -106,10 +106,11 @@ class Compiler:
             (f"{param.target}={param.default}" if param.default else param.target)
             for param in params
         ])
-    def _parse_fn(self, fn):
+    def _parse_fn(self, fn, _awaited=False):
         params = self._params(fn.params)
+        awaited = _awaited or fn.asynchronous
         scope = Scope(
-            f"def {fn.target}({params}):"
+            f"{"async " if awaited else ""}def {fn.target}({params}):"
         )
         self.cur.insert(scope)
         self.cur = scope
@@ -129,7 +130,7 @@ class Compiler:
             case "BINOP":
                 return left+expr.op+right
             case "LITERAL":
-                return expr.value
+                return expr.value if expr.value != "null" else "None"
             case "STR":
                 return repr(expr.value)
             case "ATTR":
@@ -152,7 +153,8 @@ class Compiler:
                         )
                     )
                 args = self._args(_args)
-                _call = f"{self._expr(expr.target)}({args})"
+                awaited = "await " if expr.awaited else ""
+                _call = f"{awaited}{self._expr(expr.target)}({args})"
                 if _hoisting is not False:
                     self.cur.insert(res:=Line(
                         f"{_hoisting}={_call}"
@@ -167,7 +169,7 @@ class Compiler:
                 target=expr.target
                 expr.target = f"lambda_{self.lamdba_count}"
                 self.lamdba_count+=1
-                self._parse_fn(expr)
+                self._parse_fn(expr, True)
                 return f"{target}={expr.target}"
             case _:
                 print("unknown", expr.node_type)

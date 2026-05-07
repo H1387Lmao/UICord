@@ -9,9 +9,9 @@ import discord
 import discord.ui as ui
 from discord import enums
 from uicord.lang.uistring import UIString
+from .core import *
 
-
-class Modal(ui.DesignerModal):
+class Modal(ui.DesignerModal, UIMember):
     """
     The main input/output system for modal interactions.
 

@@ -13,6 +13,7 @@ import discord.ui as ui
 
 from uicord.state import state
 from uicord.lang.uistring import UIString
+from .core import *
 
 def unpack_items(
     items
@@ -32,7 +33,7 @@ def unpack_items(
             _unpacked.append(item)
     return _unpacked
 
-class View(ui.DesignerView):
+class View(ui.DesignerView, UIMember):
     """
     The main container for every component.
 

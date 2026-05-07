@@ -13,7 +13,8 @@ from .layout   import (
     MediaGalleryItem,
 )
 from .pages    import page_buttons
-from .view     import View, interaction
+from .view     import View
+from .core     import interaction
 from .modal    import Modal
 from .compat   import role_select, Checkbox, CheckboxGroup
 

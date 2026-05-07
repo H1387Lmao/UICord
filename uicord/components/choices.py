@@ -11,10 +11,11 @@ from discord import SelectOption
 
 from uicord.components.colors  import Colors
 from uicord.components.helpers import EMPTY_CALLBACK
+from .core import *
 
 Choice = SelectOption
 
-class Choices(ui.Select):
+class Choices(ui.Select, UIMember):
     """
     A select / drop-down menu.
 
@@ -105,7 +106,7 @@ class Choices(ui.Select):
         await self.update()
         await self.view.reload(ctx)
 
-class RadioButtonOption:
+class RadioButtonOption(UIMember):
     def __init__(self, label: str, value, default: bool = False, disabled=False):
         self.label = label
         self.value = value
@@ -113,7 +114,7 @@ class RadioButtonOption:
         self.disabled=disabled
 
 
-class RadioButtons(ui.ActionRow):
+class RadioButtons(ui.ActionRow, UIMember):
     def __init__(self, *, options: RadioButtonOption=[], custom_on="✔", custom_off="✖"):
         super().__init__()
         self.btns: list[ui.Button] = []

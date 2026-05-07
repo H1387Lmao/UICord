@@ -9,9 +9,9 @@ import discord.ui as ui
 
 from uicord.components.colors  import Colors
 from uicord.components.helpers import EMPTY_CALLBACK
+from .core import *
 
-
-class Button(ui.Button):
+class Button(ui.Button, UIMember):
     """
     An interactable button.
 
@@ -74,7 +74,7 @@ class Button(ui.Button):
         self.style = value
 
 
-class Toggle(Button):
+class Toggle(Button, UIMember):
     """
     A stateful toggle button that flips between an on and off emoji.
 
