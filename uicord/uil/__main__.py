@@ -1,5 +1,4 @@
-from uil import *
-import uil.compiler as cs
+from . import *
 import sys
 
 uiLogger = Logger()
@@ -20,5 +19,5 @@ if AST is None:
 uiLogger.print(
     AstView(AST)
 )
-comp = cs.Compiler([AST])
+comp = Compiler([AST])
 (uiLogger.print_code(comp.code))

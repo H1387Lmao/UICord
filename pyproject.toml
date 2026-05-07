@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "uicord"
-version = "5.0.5"
-description = "Components V2 helper for Discord bots"
+version = "5.0.6"
+description = "Components V2 ecosystem for Discord bots"
 requires-python = ">=3.10"
 dependencies = ["py-cord>=2.7", "ply", "pygments"]
 readme = "README.md"

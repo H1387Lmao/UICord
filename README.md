@@ -18,6 +18,80 @@ A UI helper library for [pycord](https://github.com/Pycord-Development/pycord) t
 - `lang=` keyword on `View` and `Modal` for per-instance translations
 - Graceful pycord 2.7 / 2.8 compatibility shims (`MediaGalleryItem`, `Checkbox`, `CheckboxGroup`)
 
+
+## UIL
+
+- Allows users to write UIs using a builtin language.
+- Free of hassle using hoisting and multiline lambdas.
+
+Example:
+
+```py
+@home(){
+    elements = []
+    elements.append(
+        ActionRow(
+            Button(
+                text: "Click me",
+                    emoji: null,
+                    gid: "HelloBTN"
+                ),
+            Button(
+                text: "Dont click me",
+                emoji: null,
+                gid: "Dont"
+            )
+        )
+    )
+
+    HelloBTN::interact(i) => {
+        await i.respond(
+            "You clicked me!"
+        )
+    }
+
+    @why(i){
+        await i.response.edit_message(
+            view: other.warning(prof, uid)
+        )
+    }
+
+    Dont.attach(why)
+
+    -> View(
+        elements,
+        uid: uid
+    )
+}
+```
+
+### Generated equivalent
+```py
+def home(prof,uid,page):
+  elements=[]
+  HelloBTN=Button(text='Click me',emoji=null)
+  Dont=Button(text='Dont click me',emoji=null)
+  elements.append(ActionRow(HelloBTN,Dont))
+  def lambda_0(i):
+    i.respond('You clicked me!')
+
+  HelloBTN.interact=lambda_0
+  def why(i):
+    i.response.edit_message(view=other.warning(prof,uid))
+
+  Dont.attach(why)
+  return View(elements,uid=uid)
+```
+
+- UI management using `uil.load_uis`
+
+```
+import uicord.uil as uil
+uil.load_uis("./my_uis")
+
+print(uicord.state.uis) # will have every file you have in your ui folder as modules.
+```
+
 ---
 
 ## Installation
