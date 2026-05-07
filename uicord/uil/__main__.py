@@ -1,5 +1,5 @@
-from src import *
-import src.compiler as cs
+from uil import *
+import uil.compiler as cs
 import sys
 
 uiLogger = Logger()

@@ -1,8 +1,8 @@
 @warning(prof, uid){
-	-> View[
-		Text[
+	-> View(
+		Text(
 			"Why did you click me?"
-		],
+		),
 		owner: uid
-	]
+	)
 }

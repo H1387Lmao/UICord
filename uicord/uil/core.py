@@ -13,7 +13,6 @@ def AstView(node, prefix="", is_last=True, ITEM_NAME=None):
         res += f"[dark gray]└── [?]" if is_last else f"[dark Gray]├── [?]"
     res += f"[gold]{name}Ast({node.node_type})[?]\n"
 
-    print(name)
     child_prefix = prefix + ("    " if is_last else f"[dark Gray]│   [?]")
 
     items = [(k, v) for k, v in node.__dict__.items() if k != "node_type"]

@@ -5,12 +5,12 @@
 			Button(
 				text: "Click me",
 				emoji: null,
-				id: "HelloBTN"
+				gid: "HelloBTN"
 			),
 			Button(
 				text: "Dont click me",
 				emoji: null,
-				id: "Dont"
+				gid: "Dont"
 			)
 		)
 	)

@@ -1,4 +1,5 @@
 from .core import AstNode
+import random
 
 class Line:
     def __init__(
@@ -37,11 +38,9 @@ class Line:
         line.prev = self.prev
         self.prev.next = line
         self.prev = line
-        print(line)
         line.update_indent()
 
     def generate(self,index=0):
-        print(f"{index=}", self.content)
         return (
             "  "*self.indent + self.content \
             + "\n" + (
@@ -67,9 +66,10 @@ class Compiler:
         
         self.cur = self.code
 
+        self.lamdba_count = 0
+
         for prog in asts:
             self._stmts(prog.stmts)
-        print(self.code)
         self.code=self.code.generate()
 
     def _stmts(self, stmts):
@@ -84,13 +84,44 @@ class Compiler:
                 self.cur.insert(
                     res:=Line(f"{target}={value}")
                 )
-            case _:
-                res =Line(self._expr(stmt))
+            case "RETURN":
+                value = self._expr(stmt.value)
+                res = Line(f"return {value}")
                 self.cur.insert(
                     res
                 )
-        self.cur=res
+            case "FNDECL":
+                self._parse_fn(stmt)
+            case _:
+                res = Line(self._expr(stmt))
+                self.cur.insert(
+                    res
+                )
+        try:
+            self.cur=res
+        except:
+            pass
+    def _params(self, params):
+        return ",".join([
+            (f"{param.target}={param.default}" if param.default else param.target)
+            for param in params
+        ])
+    def _parse_fn(self, fn):
+        params = self._params(fn.params)
+        scope = Scope(
+            f"def {fn.target}({params}):"
+        )
+        self.cur.insert(scope)
+        self.cur = scope
 
+        self._stmts(fn.stmts)
+        
+        end_scope = Scope()
+        
+        self.cur.insert(end_scope)
+        end_scope.indent-=2
+        self.cur = end_scope
+        
     def _expr(self, expr):
         if not isinstance(expr, AstNode):
             return expr
@@ -129,6 +160,15 @@ class Compiler:
                     self.cur=res
                     return _hoisting
                 return _call
+            case "FNDECL":
+                self._parse_fn(expr)
+                return expr.target
+            case "ATTACH":
+                target=expr.target
+                expr.target = f"lambda_{self.lamdba_count}"
+                self.lamdba_count+=1
+                self._parse_fn(expr)
+                return f"{target}={expr.target}"
             case _:
                 print("unknown", expr.node_type)
                 return ""
@@ -138,6 +178,6 @@ class Compiler:
         for target, value in args:
             _res+=f"{target}"
             if value:
-                _res+="={value}"
+                _res+=f"={value}"
             _res+=","
         return _res[:-1]
