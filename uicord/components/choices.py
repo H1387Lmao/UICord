@@ -36,9 +36,14 @@ class Choices(ui.Select, UIMember):
         type        = discord.ComponentType.string_select,
         placeholder = "Pick",
         options     = [],
-        required    = False
+        required    = False,
+        min_values  = 1,
+        max_valuse  = 1
     ):
-        super().__init__(type, placeholder=placeholder, options=options, required=required)
+        super().__init__(
+            type, placeholder=placeholder, options=options, required=required,
+            min_values=min_values, max_values=max_valuse
+        )
         self.DEFAULTOPTION  = None
         self.component_type = type
 

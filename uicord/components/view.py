@@ -10,7 +10,6 @@ import traceback
 
 import discord
 import discord.ui as ui
-
 from uicord.state import state
 from uicord.lang.uistring import UIString
 from .core import *
@@ -50,6 +49,7 @@ class View(ui.DesignerView, UIMember):
     """
 
     def __init__(self, *items, owner: int | None = None, lang: str | None = None):
+        self._ui_init()
         super().__init__(*unpack_items(items), timeout=None)
         self.owner = owner
         self.lang  = lang

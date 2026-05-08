@@ -1,4 +1,4 @@
-import inspect
+import inspect, asyncio, threading
 
 def interaction(component=None):
     """
@@ -66,6 +66,8 @@ def interaction(component=None):
     return wrapper
 
 class UIMember:
+    def _ui_init(self):
+        pass
     def attach(self, fn):
         interaction(self)(fn) # attaches
     def interact(self, fn):

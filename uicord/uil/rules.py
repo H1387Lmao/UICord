@@ -110,6 +110,16 @@ def p_ATTACH(p):
         stmts=p[6]                                        
     )
 
+def p_INDEXING(p):
+    """
+    expr : expr LBRACKET expr RBRACKET
+    """
+    p[0] = AstNode(
+        "INDEXING",
+        parent=p[1],
+        child=p[3]
+    )
+
 def p_empty(p):
     """
     empty :

@@ -36,6 +36,15 @@ for rule, token_name in RULES.items():
         exec(f"t_{di[i]}{name} = r\"{c}\"")
         tokens.append(di[i]+name)
 
+def t_STR(t):
+    r'[frb]?"[^"]*"'
+    t.value=AstNode(
+        "STR",
+        value=t.value.split('"')[1],
+        format=t.value[0] if t.value[0] != '"' else None
+    )
+    return t
+
 def t_ID(t):
     r"[A-Za-z_]+\w*"
     if t.value in kwrds:
@@ -43,15 +52,6 @@ def t_ID(t):
     return t
 
 t_NUM=r"\d+(\.(\d+)?)?"
-
-def t_STR(t):
-    r'\w?"[^"]*"'
-    t.value=AstNode(
-        "STR",
-        value=t.value.split('"')[1],
-        format=t.value[0] if t.value[0] != '"' else None
-    )
-    return t
 
 def t_error(c):
     # TODO: add actual error

@@ -33,6 +33,6 @@ from uicord import *
 	
 	-> View(
 		elements,
-		uid: uid
+		owner: uid
 	)
 }

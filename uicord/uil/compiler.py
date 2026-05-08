@@ -143,11 +143,15 @@ class Compiler:
             case "LITERAL":
                 return expr.value if expr.value != "null" else "None"
             case "STR":
-                return repr(expr.value)
+                return (expr.format or '') + repr(expr.value)
             case "ATTR":
                 left = self._expr(expr.parent)
                 right = self._expr(expr.child)
                 return left+"."+right
+            case "INDEXING":
+                left = self._expr(expr.parent)
+                right = self._expr(expr.child)
+                return left+"["+right+"]"
             case "CALL":
                 _hoisting=False
                 _args = []

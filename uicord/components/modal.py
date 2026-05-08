@@ -25,6 +25,7 @@ class Modal(ui.DesignerModal, UIMember):
     """
 
     def __init__(self, title: str = "Modal Title", lang: str | None = None):
+        self._ui_init()
         super().__init__(title=title)
         self.inputs: list = []
         self.lang = lang

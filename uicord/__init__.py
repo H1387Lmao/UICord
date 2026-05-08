@@ -44,6 +44,9 @@ Pycord version compatibility
 * **2.8**  - Checkbox, CheckboxGroup (gracefully stubbed on older versions)
 """
 
+import asyncio
+import discord
+
 # ── State (always first so other modules can import it safely) ──────────────
 from uicord.state import state
 

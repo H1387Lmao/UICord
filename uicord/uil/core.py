@@ -58,6 +58,12 @@ class AstNode:
         [setattr(self, a, b)
             for a, b in kwargs.items()
         ]
+    def __str__(self):
+        res = f"{self.node_type}("
+        res += ", ".join(f"{k}={v}" for k, v in self.__dict__.items())
+        res+=")"
+        return res
+            
 
 def find_column(input_text, token):
     last_cr = input_text.rfind('\n', 0, token.lexpos)
@@ -76,7 +82,7 @@ def print_error(token):
 
     leading_ws = len(expanded) - len(stripped)
     col -= leading_ws
-
+    
     error_logger.print('[Pink]Unexpected token: `' + str(token.value) + '`')
     error_logger.print(f"[Red]At Line {token.lineno}")
     error_logger.print_code(stripped)

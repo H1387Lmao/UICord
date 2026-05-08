@@ -1,0 +1,62 @@
+from uicord import *
+import discord
+import time
+
+@config_gw(duration, prize){
+	deadline = f"<t:{time.time()+duration}:R>"
+	res = View(
+		Container(
+			Text(f"Deadline (approx.) {deadline}"),
+			Text(f"Prize: {prize}"),
+			ActionRow(
+				Choices(
+					placeholder: "Select members to whitelist",
+					min_values: 0,
+					max_values: 25,
+					gid: "white_listed"
+				)
+			),
+			ActionRow(
+				Choices(
+					placeholder:"Select members to blacklist",
+					min_values: 0,
+					max_values: 25,
+					gid: "black_listed"
+				)
+			)
+		),
+		Container(
+			Button(
+				"Send Giveaway",
+				color: colors.Green,
+				gid: "gw_button"
+			)
+		)
+	)
+	white_listed::interact(i) => {
+		member_names = white_listed.values
+		await i.response(f"Whitelist: {', '.join(map(lambda m: m.display_name, member_names))}")
+	}
+	black_listed::interact(i) => {
+		member_names = black_listed.values
+		await i.response(f"Blacklist: {', '.join(map(lambda m: m.display_name, member_names))}")
+	}
+
+	gw_button::interact(ctx) => {
+		member_names = black_listed.values
+		member_names = white_listed.values
+		
+		await ctx.send(
+			state.uis["giveaway"].main(
+				ctx.user.id,
+				duration,
+				prize,
+				white_listed,
+				black_listed
+			)
+		)
+		await ctx.respond("success")
+	}
+
+	-> res
+}
