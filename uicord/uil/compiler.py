@@ -92,6 +92,17 @@ class Compiler:
                 )
             case "FNDECL":
                 self._parse_fn(stmt)
+            case "FROM_IMPORT":
+                res = Line(f"from {stmt.parent} import {stmt.targets}")
+                self.cur.insert(
+                    res
+                )
+            case "IMPORT":
+                alias = "" if not stmt.alias else f" as {stmt.alias}"
+                res = Line(f"import {stmt.target}{alias}")
+                self.cur.insert(
+                    res
+                )
             case _:
                 res = Line(self._expr(stmt))
                 self.cur.insert(
@@ -170,7 +181,7 @@ class Compiler:
                 expr.target = f"lambda_{self.lamdba_count}"
                 self.lamdba_count+=1
                 self._parse_fn(expr, True)
-                return f"{target}={expr.target}"
+                return f"{target}({expr.target})"
             case _:
                 print("unknown", expr.node_type)
                 return ""

@@ -5,9 +5,9 @@ from .compiler import *
 import os
 import types
 import inspect
-from ..state import state
 
 def load_uis(folder: str, debug=False):
+    from ..state import state
     base_path = os.path.dirname(inspect.stack()[1].filename)
     target_path = os.path.join(base_path, folder)
 

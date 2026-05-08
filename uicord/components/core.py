@@ -68,3 +68,5 @@ def interaction(component=None):
 class UIMember:
     def attach(self, fn):
         interaction(self)(fn) # attaches
+    def interact(self, fn):
+        self.attach(fn)

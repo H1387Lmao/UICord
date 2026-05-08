@@ -1,3 +1,5 @@
+from uicord import *
+
 @home(prof, uid, page){
 	elements = []
 	elements.append(

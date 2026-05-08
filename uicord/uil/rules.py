@@ -56,7 +56,42 @@ def p_STMTCALL(p):
         args=p[3],
         awaited=False
     )
-    
+
+def p_IMPORT(p):
+    """
+    stmt : import import_name
+         | import import_name as ID
+    """
+    p[0]=AstNode(                                             
+        "IMPORT",
+        target=p[2],
+        alias = None if len(p)==3 else p[4]
+    )
+
+def p_FROM_IMPORT(p):
+    """
+    stmt : from import_name import IMPORTS
+    """
+    p[0]=AstNode(                                             
+        "FROM_IMPORT",
+        parent=p[2],
+        targets=p[4]
+    )
+
+def p_IMPORTNAME(p):
+    """
+    import_name : ID
+                | DOT import_name
+    """
+    p[0]="".join(p[1:])
+
+def p_IMPORTS(p):
+    """
+    IMPORTS : ID
+            | MULTIPLY
+    """
+    p[0]=p[1]
+
 def p_AWAITCALL(p):
     """
     expr : await call
