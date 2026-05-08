@@ -1,4 +1,5 @@
-import inspect, asyncio, threading
+import inspect, asyncio, traceback
+from ..state import state
 
 def interaction(component=None):
     """

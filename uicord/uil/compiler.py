@@ -114,7 +114,7 @@ class Compiler:
             pass
     def _params(self, params):
         return ",".join([
-            (f"{param.target}={param.default}" if param.default else param.target)
+            (f"{param.target}={self._expr(param.default)}" if param.default else param.target)
             for param in params
         ])
     def _parse_fn(self, fn, _awaited=False):
@@ -133,17 +133,24 @@ class Compiler:
         self.cur.insert(end_scope)
         end_scope.indent-=2
         self.cur = end_scope
+
+    def _parse_string(self, string):
+        return '"'+string.replace('"', '\\"')+'"'
         
     def _expr(self, expr):
         if not isinstance(expr, AstNode):
+            if isinstance(expr, list):
+                return '['+",".join([self._expr(e) for e in expr])+']'
             return expr
         match expr.node_type:
             case "BINOP":
+                left = self._expr(expr.left)
+                right = self._expr(expr.right)
                 return left+expr.op+right
             case "LITERAL":
                 return expr.value if expr.value != "null" else "None"
             case "STR":
-                return (expr.format or '') + repr(expr.value)
+                return (expr.format or '') + self._parse_string(expr.value)
             case "ATTR":
                 left = self._expr(expr.parent)
                 right = self._expr(expr.child)
@@ -186,6 +193,12 @@ class Compiler:
                 self.lamdba_count+=1
                 self._parse_fn(expr, True)
                 return f"{target}({expr.target})"
+            case "ARG":
+                _res = ""
+                _res+=f"{self._expr(expr.target)}"
+                if expr.default:
+                    _res+=f"={self._expr(expr.default)}"
+                return _res
             case _:
                 print("unknown", expr.node_type)
                 return ""
@@ -193,8 +206,8 @@ class Compiler:
     def _args(self, args):
         _res = ""
         for target, value in args:
-            _res+=f"{target}"
+            _res+=f"{self._expr(target)}"
             if value:
-                _res+=f"={value}"
+                _res+=f"={self._expr(value)}"
             _res+=","
         return _res[:-1]

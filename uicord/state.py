@@ -34,6 +34,7 @@ class _State:
     """
     Structure to store views
     """
+    interactions = {}
 
 
 state = _State()

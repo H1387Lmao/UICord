@@ -38,11 +38,11 @@ class Choices(ui.Select, UIMember):
         options     = [],
         required    = False,
         min_values  = 1,
-        max_valuse  = 1
+        max_values  = 1
     ):
         super().__init__(
             type, placeholder=placeholder, options=options, required=required,
-            min_values=min_values, max_values=max_valuse
+            min_values=min_values, max_values=max_values
         )
         self.DEFAULTOPTION  = None
         self.component_type = type

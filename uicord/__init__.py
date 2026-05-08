@@ -52,6 +52,7 @@ from uicord.state import state
 
 # ── Language / i18n ─────────────────────────────────────────────────────────
 from uicord.lang.uistring import UIString
+from uicord.utils import serialize, deserialize, ui_interaction
 
 # ── Components ───────────────────────────────────────────────────────────────
 from uicord.components import (
