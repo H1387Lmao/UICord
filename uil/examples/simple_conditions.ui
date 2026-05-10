@@ -1,0 +1,16 @@
+import random
+
+x = random.randint(0, 100)
+// had to remove this feature because its really buggy
+// y = random.randint(0, 20) if x >= 50 else random.randint(0, 100)
+
+y = x + 10
+
+if y > 50{
+	print("more than 50")
+}else if y == 50{
+	print("equal to 50")
+}else{
+	print("less than 50")
+}
+
