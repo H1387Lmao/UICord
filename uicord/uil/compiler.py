@@ -43,7 +43,11 @@ class Line:
     def generate(self,index=0):
         return (
             "  "*self.indent + self.content \
-            + "\n" + (
+            + (
+                "\n"
+                if not isinstance(self.next, EmptyScope)
+                else ""
+            ) + (
                 self.next.generate(index+1)
                 if self.next is not None
                 else ""
@@ -60,6 +64,9 @@ class Scope(Line):
 
         super().__init__(content, previous)
 
+class EmptyScope(Scope):
+    pass
+
 class Compiler:
     def __init__(self, asts):
         self.code = Scope()
@@ -75,6 +82,17 @@ class Compiler:
     def _stmts(self, stmts):
         for stmt in stmts:
             self._stmt(stmt)
+
+    def _parse_scope(self, scope, stmts):
+        self.cur.insert(scope)
+        self.cur = scope
+        self._stmts(stmts)
+
+    def _insert_empty_scope(self):
+        end_scope = EmptyScope()
+        self.cur.insert(end_scope)
+        end_scope.indent = self.cur.indent - 2
+        self.cur = end_scope
 
     def _stmt(self, stmt):
         match stmt.node_type:
@@ -103,6 +121,26 @@ class Compiler:
                 self.cur.insert(
                     res
                 )
+            case "IF":
+                cond = self._expr(stmt.expr)
+                scope = Scope(
+                    f"if {cond}:"
+                )
+                self._parse_scope(scope, stmt.stmts)
+                self._insert_empty_scope()
+                for else_stmt in stmt.elses:
+                    if not else_stmt.expr:
+                        scope = Scope(
+                            f"else:"
+                        )
+                    else:
+                        cond = self._expr(else_stmt.expr)
+                        scope = Scope(
+                            f"elif {cond}:"
+                        )
+                    self._parse_scope(scope, else_stmt.stmts)
+                    self._insert_empty_scope()
+                
             case _:
                 res = Line(self._expr(stmt))
                 self.cur.insert(
@@ -123,16 +161,8 @@ class Compiler:
         scope = Scope(
             f"{"async " if awaited else ""}def {fn.target}({params}):"
         )
-        self.cur.insert(scope)
-        self.cur = scope
-
-        self._stmts(fn.stmts)
-        
-        end_scope = Scope()
-        
-        self.cur.insert(end_scope)
-        end_scope.indent-=2
-        self.cur = end_scope
+        self._parse_scope(scope, fn.stmts)
+        self._insert_empty_scope()
 
     def _parse_string(self, string):
         return '"'+string.replace('"', '\\"')+'"'
@@ -140,7 +170,7 @@ class Compiler:
     def _expr(self, expr):
         if not isinstance(expr, AstNode):
             if isinstance(expr, list):
-                return '['+",".join([self._expr(e) for e in expr])+']'
+                return 
             return expr
         match expr.node_type:
             case "BINOP":
@@ -155,22 +185,30 @@ class Compiler:
                 left = self._expr(expr.parent)
                 right = self._expr(expr.child)
                 return left+"."+right
+            case "LIST":
+                return '['+",".join([self._expr(e) for e in expr.values])+']'
             case "INDEXING":
                 left = self._expr(expr.parent)
                 right = self._expr(expr.child)
                 return left+"["+right+"]"
+            case "IF_EXPR":
+                left = self._expr(expr.left)
+                right = self._expr(expr.right)
+                expr = self._expr(expr.expr)
+
+                return f"{left} if {expr} else {right}"
             case "CALL":
                 _hoisting=False
                 _args = []
                 for arg in expr.args:
                     if arg.target == "gid":
-                        _hoisting=arg.default.value
+                        _hoisting=self._expr(arg.value)
                         continue
                     _args.append(
                         (
                             self._expr(arg.target),
                             self._expr(
-                                arg.default
+                                arg.value
                             )
                         )
                     )
@@ -196,8 +234,8 @@ class Compiler:
             case "ARG":
                 _res = ""
                 _res+=f"{self._expr(expr.target)}"
-                if expr.default:
-                    _res+=f"={self._expr(expr.default)}"
+                if expr.value:
+                    _res+=f"={self._expr(expr.value)}"
                 return _res
             case _:
                 print("unknown", expr.node_type)

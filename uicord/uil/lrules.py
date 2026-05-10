@@ -1,7 +1,7 @@
 import re
 from .core import AstNode
 
-kwrds=("await", "async", "import", "from", "as")
+kwrds=("await", "async", "import", "from", "as", "if", "else")
 
 RULES = {
     r"\+": "PLUS",
@@ -18,7 +18,14 @@ RULES = {
     "=>": "FARROW",
     (r"\(", r"\)"): ("LR", "PAREN"),
     (r"\{", r"\}"): ("LR", "BRACE"),
-    (r"\[", r"\]"): ("LR", "BRACKET")
+    (r"\[", r"\]"): ("LR", "BRACKET"),
+    r"\|\|": "OR",
+    r"&&": "AND",
+    r"==": "EQEQ",
+    r"<=": "LEQ",
+    r">=": "MEQ",
+    r"<" : "LESS",
+    r">" : "MORE"
 }
 
 tokens = [

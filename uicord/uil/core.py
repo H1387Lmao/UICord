@@ -21,6 +21,10 @@ def AstView(node, prefix="", is_last=True, ITEM_NAME=None):
         last = i == len(items) - 1
 
         if isinstance(v, AstNode):
+            print(v)
+            print('--')
+            print(node)
+            print('--end--')
             res += AstView(v, child_prefix, last, ITEM_NAME=k)
 
         elif isinstance(v, list):
