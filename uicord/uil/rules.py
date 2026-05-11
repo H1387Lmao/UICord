@@ -39,6 +39,47 @@ def p_FNDECL(p):
         asynchronous=bool(offset)
     )
 
+def p_FORLOOP_HEADER(p):
+    """
+    fl_header : for expr in expr
+    """
+    p[0] = AstNode(
+        "FORLOOP",
+        child=p[2],
+        parent=p[4]
+    )
+
+def p_FORLOOP(p):
+    """
+    stmt : fl_header scope
+    """
+    p[1].stmts = p[2]
+    p[0]=p[1]
+
+def p_LISTCOMPREHENSION(p):
+    """
+    expr : LBRACKET expr fl_header RBRACKET
+         | LBRACKET expr fl_header if expr RBRACKET
+    """
+    p[0]=AstNode(
+        "LIST_COMP",
+        expr=p[2],
+        target=p[3],
+        cond=p[5] if len(p)==7 else None
+    )
+
+def p_IFEXPR(p):
+    """
+    expr : if expr COLON expr else expr
+    """
+
+    p[0]=AstNode(
+        "IFEXPR",
+        left=p[4],
+        expr=p[2],
+        right=p[6]
+    )
+
 def p_ELSE(p):
     """
     else_part : else scope

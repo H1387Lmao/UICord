@@ -1,8 +1,7 @@
 import random
 
 x = random.randint(0, 100)
-// had to remove this feature because its really buggy
-// y = random.randint(0, 20) if x >= 50 else random.randint(0, 100)
+y = if x >= 50 : random.randint(0, 20) else random.randint(0, 100)
 
 y = x + 10
 
@@ -14,3 +13,12 @@ if y > 50{
 	print("less than 50")
 }
 
+
+
+for i in range(50){
+	print(i)
+}
+
+my_list_comprehension = [
+	i*2 for i in range(30)
+]

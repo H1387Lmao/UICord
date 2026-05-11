@@ -7,7 +7,13 @@ import types
 import inspect
 
 def load_uis(folder: str, debug=False):
-    from ..state import state
+    try:
+        from ..state import state
+    except ImportError:
+        class State:
+            pass
+        state = State()
+
     base_path = os.path.dirname(inspect.stack()[1].filename)
     target_path = os.path.join(base_path, folder)
 

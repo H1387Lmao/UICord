@@ -121,6 +121,12 @@ class Compiler:
                 self.cur.insert(
                     res
                 )
+            case "FORLOOP":
+                scope = Scope(
+                    f"for {self._expr(stmt.child)} in {self._expr(stmt.parent)}:"
+                )
+                self._parse_scope(scope, stmt.stmts)
+                self._insert_empty_scope()
             case "IF":
                 cond = self._expr(stmt.expr)
                 scope = Scope(
@@ -178,7 +184,7 @@ class Compiler:
                 right = self._expr(expr.right)
                 return left+expr.op+right
             case "LITERAL":
-                return expr.value if expr.value != "null" else "None"
+                return self._expr(expr.value) if expr.value != "null" else "None"
             case "STR":
                 return (expr.format or '') + self._parse_string(expr.value)
             case "ATTR":
@@ -191,18 +197,28 @@ class Compiler:
                 left = self._expr(expr.parent)
                 right = self._expr(expr.child)
                 return left+"["+right+"]"
-            case "IF_EXPR":
+            case "IFEXPR":
                 left = self._expr(expr.left)
                 right = self._expr(expr.right)
                 expr = self._expr(expr.expr)
 
                 return f"{left} if {expr} else {right}"
+            case "LIST_COMP":
+                res = f"[{self._expr(expr.expr)} for "
+                res += self._expr(expr.target.child)
+                res += " in "
+                res += self._expr(expr.target.parent)
+
+                if expr.cond:
+                    res += f" if {self._expr(expr.cond)}"
+                res += "]"
+                return res
             case "CALL":
                 _hoisting=False
                 _args = []
                 for arg in expr.args:
                     if arg.target == "gid":
-                        _hoisting=self._expr(arg.value)
+                        _hoisting=arg.value.value.value
                         continue
                     _args.append(
                         (
@@ -233,9 +249,10 @@ class Compiler:
                 return f"{target}({expr.target})"
             case "ARG":
                 _res = ""
-                _res+=f"{self._expr(expr.target)}"
-                if expr.value:
-                    _res+=f"={self._expr(expr.value)}"
+                
+                if expr.target:
+                    _res+=f"{self._expr(expr.target)}="
+                _res+=f"{self._expr(expr.value)}"
                 return _res
             case _:
                 print("unknown", expr.node_type)
@@ -244,8 +261,8 @@ class Compiler:
     def _args(self, args):
         _res = ""
         for target, value in args:
-            _res+=f"{self._expr(target)}"
-            if value:
-                _res+=f"={self._expr(value)}"
+            if target:
+                _res+=f"{self._expr(target)}="
+            _res+=f"{self._expr(value)}"
             _res+=","
         return _res[:-1]
