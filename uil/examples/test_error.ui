@@ -1,0 +1,96 @@
+from uicord import *
+import discord
+import time
+import re
+
+@config_gw(duration, prize){
+	deadline = int(time.time())+duration
+	res = View(
+		Container(
+			Text(f"### **{prize}**"),
+			Text(f"Ends: <t:{deadline}:R> (<t:{deadline}:F>)"),
+			
+			ActionRow(
+				Choices(
+					type: discord.ComponentType.user_select,
+					placeholder: "Select members to whitelist",
+					min_values: 1,
+					max_values: 25,
+					gid: "white_listed"
+				)
+			),
+			ActionRow(
+				Choices(
+					type: discord.ComponentType.user_select,
+					placeholder:"Select members to blacklist",
+					min_values: 1,
+					max_values: 25,
+					gid: "black_listed"
+				)
+			),
+			ActionRow(
+				Choices(
+					type: discord.ComponentType.string_select,
+					options: [
+						Choice(
+							label: "10 Messages"
+							value: "10"
+						),
+						Choice(
+							label: "50 Messages",
+							value: "50"
+						),
+						Choice(
+							label: "100 Messages",
+							value: "100"
+						)
+					],
+					placeholder: "Optional Daily Message Requirement",
+					gid: "daily_requirement"
+				)
+			)
+		),
+		Container(
+			ActionRow(
+				Button(
+					"Send Giveaway",
+					color: Colors.Green,
+					gid: "gw_button"
+				)
+			)
+		)
+	)
+	white_listed::interact(i) => {
+		member_names = white_listed.values
+		await i.respond(f"Whitelist: {', '.join(map(lambda m: m.mention, member_names))}", ephemeral:True)
+	}
+	black_listed::interact(i) => {
+		member_names = black_listed.values
+		await i.respond(f"Blacklist: {', '.join(map(lambda m: m.mention, member_names))}", ephemeral:True)
+	}
+
+	gw_button::interact(ctx) => {
+		blacks = black_listed.values
+		whites = white_listed.values
+
+		await ctx.respond(
+			view: View(Text("Creating Giveaway..."))
+		)
+		msg = await ctx.original_response()
+		await msg.edit(
+			view: state.uis.get("giveaway").main(
+				ctx.user.id,
+				deadline,
+				prize,
+				whites,
+				blacks,
+				[],
+				msg.id,
+				ctx.channel.id,
+				int(daily_requirement.values[0])
+			)
+		)
+	}
+
+	-> res
+}
