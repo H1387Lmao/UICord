@@ -277,6 +277,8 @@ def p_CONDITION(p):
               | expr OR expr
               | expr AND expr
     """
+    if p[2]=="||": p[2]=" or "
+    if p[2]=="&&": p[2]=" and "
     p[0] = AstNode(
         "BINOP",
         left=p[1],
